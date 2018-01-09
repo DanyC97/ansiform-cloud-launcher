@@ -1,0 +1,11 @@
+# Terraform openstack provider
+# ----------------------------------------------------------------------------
+provider "openstack" {
+  user_name   = "{{ item_cloud.username }}"
+  tenant_name = "{{ item_cloud.project_name }}"
+  password    = "{{ item_cloud.password }}"
+  auth_url    = "{{ item_cloud.auth_url }}"
+  region      = "{{ item_cloud.region_name }}"
+  domain_id   = "{{ item_cloud.domain_id }}"
+  insecure    = "{{ item_cloud.insecure }}"
+}

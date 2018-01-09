@@ -1,0 +1,5 @@
+---
+- name: Processing network {{ item_network.name }} on cloud {{ item_cloud.name }}"
+  template:
+   src: network.tf.j2
+   dest: "{{ oAnsiformCloudBuilderExportDirectory }}/{{ item_cloud.name }}/{{ item_profile }}-{{ item_network.name }}-network.tf"

@@ -1,0 +1,11 @@
+# Terraform openstack router
+# ----------------------------------------------------------------------------
+resource "openstack_networking_router_v2" "{{ item_router.name }}" {
+  name             = "{{ item_router.name }}"
+  external_gateway = "{{ item_cloud.external_gateway }}"
+}
+
+resource "openstack_networking_router_interface_v2" "{{ item_router.interfaces }}" {
+  router_id = "${openstack_networking_router_v2.{{ item_router.name }}.id}"
+  subnet_id = "${openstack_networking_subnet_v2.{{ item_router.interfaces }}.id}"
+}

@@ -1,0 +1,139 @@
+# ---------------------------------------------------------------------------
+# Building blocks
+# ---------------------------------------------------------------------------
+profiles:
+- name: CNSPR-BESTCLOUD
+  keypairs:
+    - name: CNSPR-ADMIN-KEY
+      public_key_file: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABWIoHpzwF6Ry0M/5ZDyk7BGQkbfVCQbSJAAACAQC+TrYIShTxYzu1MRwmvlL0onTEHyj9T+dExZAADKH/QmNGZasSDLRK3kElCEkhAI+p6fMhrV1mecRwQicjvoT1uTQRcw5cRjNp9iF/Hph9//gCfyk7sQ56zCm+2lGrUWjxXuRdATfsMGd8xYB57d0BFOGpxbG3QHW8McHVcS8R3AjD4Togtl+9HhyBhoUJSypv4h9JXM6KHYh1eoXSge6cumtrX2Sf0vMZKTdEExYUS1tAEIK9EyGr2Vkz5O+GGPfih6vlwmdthSDMVXinsMdS7zJKIH5/Xf3fSV96ndJk6iuvWTI1VG40JhV2IUpAjzDHVmABCiL7Pj/oLcPvgzZt80v+jhTlA4rPn5KQ== admin1234@admin1234-VirtualBox"
+    - name: CNSPR-INTERNAL-KEY
+      public_key_file: "ssh-rsa AAAAB3NzaC1yrmg7jZvRyO2FqyK7SPAKi5/QbMH09UwQKIMIbk2jwc2EAA7fdqedM+VUrj8WmbaLKpXspKbBxDfXKC5Rgy7ZL6GMIbVg9dudE4Tmd851HV5mzto9aO4pyC1fKlzZWYn0dmdDZWkgLGDClOS8kMSzWwYAV8N5hOnCVrHy+qKkyVxToUH4lRy5Lezzav9i/DxrEevbVuLjyxtLfinAxG04o8xUu3uf2tQCjT8S3RhkgjNxrS0bw7pYp5e2yPzenhNuAKm7YltALAlu9v/Upkh15P0WnJ4LO0GqwxoLGansN3frw2RVnCIFSU2D7jnSVZ0USfMSAJC/7+zgd5Frt4hCWjJ26j6VdfThCKk6NWTgkvRkK47zOrjRV6M2jmTF/AkE6vtM36upVwklFQsgqoY9S0Rw== opsk2356@opsk2356-VirtualBox"
+  networks:
+    - name: CNSPR-NETWORK
+  subnets:
+    - name: CNSPR-SUBNET
+      network_name: CNSPR-NETWORK
+      cidr: 192.168.1.0/24
+  routers:
+    - name: CNSPR-ROUTER
+      interfaces: CNSPR-SUBNET
+  security_groups:
+    - name: CNSPR-REBOND
+      description: "ssh access on bastion server from outside"
+    - name: CNSPR-DNS
+      description: "DNS access from inside"
+    - name: CNSPR-INTERNAL
+      description: "Ping between all servers, ssh access from bastion to all servers inside"
+    - name: CNSPR-SDMASTER
+      description: "Production flows"
+  security_groups_rules:
+    - security_group: CNSPR-REBOND
+      protocol: tcp
+      direction: ingress
+      port_range_min: 22
+      port_range_max: 22
+      remote_ip_prefix: 0.0.0.0/0
+    - security_group: CNSPR-REBOND
+      protocol: icmp
+      direction: ingress
+      remote_ip_prefix: 0.0.0.0/0
+    - security_group: CNSPR-INTERNAL
+      protocol: icmp
+      direction: ingress
+      remote_group: CNSPR-INTERNAL
+    - security_group: CNSPR-INTERNAL
+      protocol: icmp
+      direction: egress
+      remote_group: CNSPR-INTERNAL
+    - security_group: CNSPR-INTERNAL
+      protocol: tcp
+      direction: ingress
+      port_range_min: 22
+      port_range_max: 22
+      remote_group: CNSPR-REBOND
+    - security_group: CNSPR-DNS
+      protocol: tcp
+      direction: egress
+      port_range_min: 53
+      port_range_max: 53
+      remote_ip_prefix: 10.171.108.2/32
+    - security_group: CNSPR-DNS
+      protocol: udp
+      direction: egress
+      port_range_min: 53
+      port_range_max: 53
+      remote_ip_prefix: 10.171.108.2/32
+    - security_group: CNSPR-SDMASTER
+      protocol: tcp
+      direction: ingress
+      port_range_min: 8300
+      port_range_max: 8300
+      remote_ip_prefix: 0.0.0.0/0
+    - security_group: CNSPR-SDMASTER
+      protocol: tcp
+      direction: ingress
+      port_range_min: 8301
+      port_range_max: 8302
+      remote_ip_prefix: 0.0.0.0/0
+    - security_group: CNSPR-SDMASTER
+      protocol: tcp
+      direction: egress
+      port_range_min: 8301
+      port_range_max: 8302
+      remote_ip_prefix: 0.0.0.0/0
+    - security_group: CNSPR-SDMASTER
+      protocol: udp
+      direction: ingress
+      port_range_min: 8301
+      port_range_max: 8302
+      remote_ip_prefix: 0.0.0.0/0
+    - security_group: CNSPR-SDMASTER
+      protocol: udp
+      direction: egress
+      port_range_min: 8301
+      port_range_max: 8302
+      remote_ip_prefix: 0.0.0.0/0
+    - security_group: CNSPR-SDMASTER
+      protocol: tcp
+      direction: ingress
+      port_range_min: 8500
+      port_range_max: 8500
+      remote_ip_prefix: 0.0.0.0/0
+    - security_group: CNSPR-SDMASTER
+      protocol: tcp
+      direction: ingress
+      port_range_min: 8600
+      port_range_max: 8600
+      remote_ip_prefix: 0.0.0.0/0
+    - security_group: CNSPR-SDMASTER
+      protocol: udp
+      direction: ingress
+      port_range_min: 8600
+      port_range_max: 8600
+      remote_ip_prefix: 0.0.0.0/0
+
+# ---------------------------------------
+# Targets definitions
+# ---------------------------------------
+clouds:
+  - name: CNSPR-BESTCLOUD_QA
+    auth_url: https://bestcloud-identity.com/v3
+    username: qateam
+    password: Q@T#am31
+    project_name: multipaas
+    domain_id: "default"
+    region_name: berlin
+    external_gateway: "5666dc44-dbda-4752-8166-fe782e77cc29"
+    profiles:
+      - CNSPR-BESTCLOUD
+  - name: CNSPR-BESTCLOUD_PROD
+    auth_url: https://bestcloud-identity.com/v3
+    username: opsteam
+    password: MySup#rP@ssw0rdOfTheDEAth
+    project_name: cnspr
+    domain_id: "default"
+    region_name: frankfurt
+    insecure: true
+    external_gateway: "5772dc44-dbda-4777-7755-fe782e66cc78"
+    profiles:
+      - CNSPR-BESTCLOUD

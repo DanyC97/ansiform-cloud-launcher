@@ -1,0 +1,10 @@
+---
+# SG Rule have no names, but I need to build a unique name for each rules, so I use an incrmental variable.
+# It should be possible, maybe, to use and system UUID instead.
+- name: Increment SGRule variable
+  set_fact: SGRule_number={{ SGRule_number | int + 1 }}
+
+- name: Processing security group rules on cloud {{ item_cloud.name }}"
+  template:
+   src: security_group_rules.tf.j2
+   dest: "{{ oAnsiformCloudBuilderExportDirectory }}/{{ item_cloud.name }}/{{ item_profile }}-{{ item_security_group_rule.security_group }}-SGRule_{{ SGRule_number }}.tf"

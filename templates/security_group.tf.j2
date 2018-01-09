@@ -1,0 +1,8 @@
+# Terraform openstack security group
+# ----------------------------------------------------------------------------
+resource "openstack_networking_secgroup_v2" "{{ item_security_group.name }}" {
+  name        = "{{ item_security_group.name }}"
+{% if item_security_group.description is defined %}
+  description = "{{ item_security_group.description }}"
+{% endif %}
+}

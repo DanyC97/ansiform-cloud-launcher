@@ -1,0 +1,5 @@
+---
+- name: Processing router {{ item_router.name }} on cloud {{ item_cloud.name }}"
+  template:
+   src: router.tf.j2
+   dest: "{{ oAnsiformCloudBuilderExportDirectory }}/{{ item_cloud.name }}/{{ item_profile }}-{{ item_router.name }}-router.tf"

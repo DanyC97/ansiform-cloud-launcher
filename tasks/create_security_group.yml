@@ -1,0 +1,5 @@
+---
+- name: Processing security group {{ item_security_group.name }} on cloud {{ item_cloud.name }}"
+  template:
+   src: security_group.tf.j2
+   dest: "{{ oAnsiformCloudBuilderExportDirectory }}/{{ item_cloud.name }}/{{ item_profile }}-{{ item_security_group.name }}-SG.tf"

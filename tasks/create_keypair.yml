@@ -1,0 +1,5 @@
+---
+- name: Processing keypair {{ item_keypair.name }} on cloud {{ item_cloud.name }}"
+  template:
+   src: keypair.tf.j2
+   dest: "{{ oAnsiformCloudBuilderExportDirectory }}/{{ item_cloud.name }}/{{ item_profile }}-{{ item_keypair.name }}-keypair.tf"

@@ -1,0 +1,18 @@
+---
+- name: Create Terraform directory for cloud
+  file:
+    path: "{{ oAnsiformCloudBuilderExportDirectory }}/{{ item_cloud.name }}"
+    state: directory
+
+- name: "Processing profiles resources for cloud {{ item_cloud.name }}"
+  include: create_per_cloud_profiles_resources.yml
+  with_items: "{{ item_cloud.profiles|default([]) }}"
+  loop_control:
+    loop_var: item_profile
+
+- name: "Processing provider resources for cloud {{ item_cloud.name }}"
+  # debug:
+  #   msg: "{{ item_cloud.project_name }}"
+  template:
+   src: provider.tf.j2
+   dest: "{{ oAnsiformCloudBuilderExportDirectory }}/{{ item_cloud.name }}/{{ item_cloud.name }}-provider.tf"

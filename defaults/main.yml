@@ -1,0 +1,3 @@
+---
+# defaults file for orange.ansiform-cloud-builder
+oAnsiformCloudBuilderExportDirectory: "Terraform"

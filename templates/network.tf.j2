@@ -1,0 +1,6 @@
+# Terraform openstack network
+# ----------------------------------------------------------------------------
+resource "openstack_networking_network_v2" "{{ item_network.name }}" {
+  name           = "{{ item_network.name }}"
+  admin_state_up = "true"
+}
